@@ -12,6 +12,7 @@ use App\Models\Coach;
 use App\Models\Route;
 use App\Models\Notification;
 use App\Models\Station;
+use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
@@ -120,8 +121,22 @@ class BookingController extends Controller
             'passengers.*.age' => 'required|integer|min:1|max:120',
             'passengers.*.gender' => 'required|in:Male,Female,Other',
             'passengers.*.berth_preference' => 'nullable|string',
+            'passengers.*.coach_number' => 'nullable|string',
+            'passengers.*.seat_number' => 'nullable|integer',
             'total_fare' => 'required|numeric',
         ]);
+
+        // Validate seat map selection if provided
+        $occupied = $this->getOccupiedSeats($validated['schedule_id'], $validated['class_type']);
+        foreach ($validated['passengers'] as $psg) {
+            if (!empty($psg['coach_number']) && !empty($psg['seat_number'])) {
+                $coach = $psg['coach_number'];
+                $seat = (int) $psg['seat_number'];
+                if (isset($occupied[$coach]) && in_array($seat, $occupied[$coach])) {
+                    return redirect()->back()->withErrors(['error' => "Seat {$coach}-{$seat} is already occupied or locked by another passenger. Please select a different seat."]);
+                }
+            }
+        }
 
         $pnr = '4' . str_pad(rand(0, 999999999), 9, '0', STR_PAD_LEFT);
 
@@ -152,13 +167,16 @@ class BookingController extends Controller
 
             // Create pending passengers
             foreach ($validated['passengers'] as $psg) {
+                $hasCustomSeat = !empty($psg['coach_number']) && !empty($psg['seat_number']);
                 Passenger::create([
                     'booking_id' => $booking->id,
                     'name' => $psg['name'],
                     'age' => $psg['age'],
                     'gender' => $psg['gender'],
                     'berth_preference' => $psg['berth_preference'] ?? null,
-                    'status' => 'WL', // Set to WL initially, assigned on payment success
+                    'coach_number' => $psg['coach_number'] ?? null,
+                    'seat_number' => $psg['seat_number'] ?? null,
+                    'status' => $hasCustomSeat ? 'CNF' : 'WL', // Confirmed if pre-selected seat, else WL (reallocated on payment)
                 ]);
             }
 
@@ -207,6 +225,37 @@ class BookingController extends Controller
         // Handle Success: Lock tables and allocate seats!
         DB::beginTransaction();
         try {
+            // Process Agent wallet balance if paying via Wallet
+            $user = Auth::user();
+            if ($request->payment_method === 'Wallet' && $user->role === 'agent') {
+                if ($user->wallet_balance < $booking->total_fare) {
+                    throw new \Exception('Insufficient wallet balance.');
+                }
+                
+                // Debit wallet
+                $user->decrement('wallet_balance', $booking->total_fare);
+                
+                // Log transaction
+                WalletTransaction::create([
+                    'user_id' => $user->id,
+                    'amount' => $booking->total_fare,
+                    'type' => 'Debit',
+                    'description' => "Ticket Booking for PNR: {$booking->pnr}",
+                ]);
+
+                // Credit 2% commission cashback
+                $commission = round($booking->total_fare * 0.02, 2);
+                if ($commission > 0) {
+                    $user->increment('wallet_balance', $commission);
+                    WalletTransaction::create([
+                        'user_id' => $user->id,
+                        'amount' => $commission,
+                        'type' => 'Credit',
+                        'description' => "2% Booking Commission Cashback for PNR: {$booking->pnr}",
+                    ]);
+                }
+            }
+
             // Lock coaches & bookings on this schedule to prevent race conditions (Pessimistic Seat Locking)
             $schedule = Schedule::where('id', $booking->schedule_id)->lockForUpdate()->first();
             $coaches = Coach::where('train_id', $booking->train_id)
@@ -215,17 +264,26 @@ class BookingController extends Controller
 
             $totalSeats = $coaches->sum('total_seats');
 
-            // Find all currently occupied seats (status CNF or RAC)
+            // Find all occupied seats excluding current booking
             $occupiedSeats = Passenger::whereHas('booking', function ($q) use ($booking) {
                 $q->where('schedule_id', $booking->schedule_id)
                   ->where('class_type', $booking->class_type)
-                  ->whereIn('status', ['Booked', 'Partial']);
-            })->whereIn('status', ['CNF', 'RAC'])
-              ->get(['coach_number', 'seat_number'])
-              ->groupBy('coach_number')
-              ->map(function ($items) {
-                  return $items->pluck('seat_number')->toArray();
-              })->toArray();
+                  ->where('id', '!=', $booking->id)
+                  ->where(function ($query) {
+                      $query->whereIn('status', ['Booked', 'Partial'])
+                            ->orWhere(function ($sub) {
+                                $sub->where('status', 'Pending')
+                                    ->where('created_at', '>=', now()->subMinutes(5));
+                            });
+                  });
+            })
+            ->whereNotNull('coach_number')
+            ->whereNotNull('seat_number')
+            ->get(['coach_number', 'seat_number'])
+            ->groupBy('coach_number')
+            ->map(function ($items) {
+                return $items->pluck('seat_number')->toArray();
+            })->toArray();
 
             $passengers = $booking->passengers;
             $assignedPassengers = [];
@@ -235,45 +293,64 @@ class BookingController extends Controller
             foreach ($passengers as $passenger) {
                 $allocated = false;
 
-                // Try to find seat in one of the coaches
-                foreach ($coaches as $coach) {
-                    $coachOccupied = $occupiedSeats[$coach->coach_number] ?? [];
-                    
-                    // Generate list of vacant seat numbers in this coach
-                    $vacantSeats = array_diff(range(1, $coach->total_seats), $coachOccupied);
-
-                    if (empty($vacantSeats)) continue;
-
-                    // Match berth preference if specified
-                    $pref = $passenger->berth_preference;
-                    $bestSeat = null;
-
-                    if ($pref) {
-                        foreach ($vacantSeats as $seat) {
-                            if ($this->getBerthType($seat, $booking->class_type) === $pref) {
-                                $bestSeat = $seat;
-                                break;
-                            }
-                        }
-                    }
-
-                    // Fallback to any vacant seat if preference not found
-                    if (!$bestSeat) {
-                        $bestSeat = reset($vacantSeats);
-                    }
-
-                    if ($bestSeat) {
-                        // Mark as Confirmed (CNF)
+                // Detect selected seat inputs (keep them if vacant; auto-allocate otherwise)
+                if (!empty($passenger->coach_number) && !empty($passenger->seat_number)) {
+                    $cNum = $passenger->coach_number;
+                    $sNum = (int)$passenger->seat_number;
+                    $coachOccupied = $occupiedSeats[$cNum] ?? [];
+                    if (!in_array($sNum, $coachOccupied)) {
+                        // Keep it!
                         $passenger->update([
                             'status' => 'CNF',
-                            'coach_number' => $coach->coach_number,
-                            'seat_number' => $bestSeat,
+                            'coach_number' => $cNum,
+                            'seat_number' => $sNum,
                         ]);
-                        
-                        // Add to occupied list locally for next passengers in this loop
-                        $occupiedSeats[$coach->coach_number][] = $bestSeat;
+                        $occupiedSeats[$cNum][] = $sNum;
                         $allocated = true;
-                        break;
+                    }
+                }
+
+                if (!$allocated) {
+                    // Try to find seat in one of the coaches
+                    foreach ($coaches as $coach) {
+                        $coachOccupied = $occupiedSeats[$coach->coach_number] ?? [];
+                        
+                        // Generate list of vacant seat numbers in this coach
+                        $vacantSeats = array_diff(range(1, $coach->total_seats), $coachOccupied);
+
+                        if (empty($vacantSeats)) continue;
+
+                        // Match berth preference if specified
+                        $pref = $passenger->berth_preference;
+                        $bestSeat = null;
+
+                        if ($pref) {
+                            foreach ($vacantSeats as $seat) {
+                                if ($this->getBerthType($seat, $booking->class_type) === $pref) {
+                                    $bestSeat = $seat;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Fallback to any vacant seat if preference not found
+                        if (!$bestSeat) {
+                            $bestSeat = reset($vacantSeats);
+                        }
+
+                        if ($bestSeat) {
+                            // Mark as Confirmed (CNF)
+                            $passenger->update([
+                                'status' => 'CNF',
+                                'coach_number' => $coach->coach_number,
+                                'seat_number' => $bestSeat,
+                            ]);
+                            
+                            // Add to occupied list locally for next passengers in this loop
+                            $occupiedSeats[$coach->coach_number][] = $bestSeat;
+                            $allocated = true;
+                            break;
+                        }
                     }
                 }
 
@@ -582,5 +659,91 @@ class BookingController extends Controller
             return 'Middle';
         }
         return 'Lower';
+    }
+
+    /**
+     * Fetch occupied seat mapping for a schedule and class type.
+     */
+    public function getOccupiedSeats($scheduleId, $classType)
+    {
+        $occupied = Passenger::whereHas('booking', function ($q) use ($scheduleId, $classType) {
+            $q->where('schedule_id', $scheduleId)
+              ->where('class_type', $classType)
+              ->where(function ($query) {
+                  $query->whereIn('status', ['Booked', 'Partial'])
+                        ->orWhere(function ($sub) {
+                            $sub->where('status', 'Pending')
+                                ->where('created_at', '>=', now()->subMinutes(5));
+                        });
+              });
+        })
+        ->whereNotNull('coach_number')
+        ->whereNotNull('seat_number')
+        ->get(['coach_number', 'seat_number'])
+        ->groupBy('coach_number')
+        ->map(function ($items) {
+            return $items->pluck('seat_number')->toArray();
+        })
+        ->toArray();
+
+        return $occupied;
+    }
+
+    /**
+     * API Endpoint for fetching occupied seats
+     */
+    public function getOccupiedSeatsApi(Request $request)
+    {
+        $request->validate([
+            'schedule_id' => 'required|exists:schedules,id',
+            'class_type' => 'required|string',
+        ]);
+        
+        $schedule = Schedule::findOrFail($request->schedule_id);
+        $coaches = Coach::where('train_id', $schedule->train_id)
+            ->where('class_type', $request->class_type)
+            ->get(['coach_number', 'total_seats']);
+
+        $occupied = $this->getOccupiedSeats($request->schedule_id, $request->class_type);
+        return response()->json([
+            'coaches' => $coaches,
+            'occupied' => $occupied
+        ]);
+    }
+
+    /**
+     * Render Public PNR Search page.
+     */
+    public function pnrLookupPage()
+    {
+        return Inertia::render('PnrChecker');
+    }
+
+    /**
+     * Handle Public PNR Search API query.
+     */
+    public function pnrLookupApi(Request $request)
+    {
+        $request->validate([
+            'pnr' => 'required|string|size:10',
+        ]);
+
+        $booking = Booking::with(['train', 'sourceStation', 'destinationStation', 'passengers.ticket'])
+            ->where('pnr', $request->pnr)
+            ->first();
+
+        if (!$booking) {
+            return response()->json(['error' => 'PNR not found.'], 404);
+        }
+
+        $delayMinutes = 0;
+        if ($booking->schedule) {
+            $delayMinutes = $booking->schedule->delay_minutes;
+        }
+
+        return response()->json([
+            'booking' => $booking,
+            'delay_minutes' => $delayMinutes,
+        ]);
     }
 }

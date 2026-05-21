@@ -20,8 +20,26 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+// Public PNR Lookup Checker
+Route::get('/pnr', [BookingController::class, 'pnrLookupPage'])->name('pnr.checker');
+Route::post('/pnr/lookup', [BookingController::class, 'pnrLookupApi'])->name('pnr.lookup');
+
 // Authenticated Routes
 Route::middleware(['auth', 'verified'])->group(function () {
+    // Occupied Seats for Visual Map
+    Route::get('/bookings/occupied-seats', [BookingController::class, 'getOccupiedSeatsApi'])->name('bookings.occupied-seats');
+
+    // E-Catering Meal Booking
+    Route::get('/catering/{pnr}', [\App\Http\Controllers\CateringController::class, 'catalog'])->name('catering.catalog');
+    Route::post('/catering/order', [\App\Http\Controllers\CateringController::class, 'order'])->name('catering.order');
+
+    // Agent Portal & Wallet System
+    Route::get('/agent/dashboard', [\App\Http\Controllers\AgentController::class, 'index'])->name('agent.dashboard');
+    Route::post('/agent/deposit', [\App\Http\Controllers\AgentController::class, 'deposit'])->name('agent.deposit');
+
+    // Live GPS Train Tracking
+    Route::get('/trains/schedules/{schedule_id}/tracking', [TrainController::class, 'trackingDetails'])->name('trains.tracking');
+
     
     // Unified Role-Based Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

@@ -38,6 +38,8 @@ export default function AuthenticatedLayout({ header, children }) {
             mark_read: 'Read',
             welcome: 'Welcome back',
             sos_warning: '🚨 EMERGENCY SOS ACTIVE',
+            pnr_enquiry: 'PNR Enquiry',
+            agent_desk: 'Agent Desk',
         },
         hi: {
             dashboard: 'डैशबोर्ड',
@@ -53,6 +55,8 @@ export default function AuthenticatedLayout({ header, children }) {
             mark_read: 'पढ़े',
             welcome: 'सुस्वागतम',
             sos_warning: '🚨 आपातकालीन SOS सक्रिय',
+            pnr_enquiry: 'पीएनआर पूछताछ',
+            agent_desk: 'एजेंट डेस्क',
         },
         bn: {
             dashboard: 'ড্যাশবোর্ড',
@@ -68,6 +72,8 @@ export default function AuthenticatedLayout({ header, children }) {
             mark_read: 'পঠিত',
             welcome: 'স্বাগতম',
             sos_warning: '🚨 জরুরী SOS সক্রিয়',
+            pnr_enquiry: 'পিএনআর অনুসন্ধান',
+            agent_desk: 'এজেন্ট ডেস্ক',
         },
         ta: {
             dashboard: 'டேஷ்போர்டு',
@@ -83,6 +89,8 @@ export default function AuthenticatedLayout({ header, children }) {
             mark_read: 'படிக்கப்பட்டது',
             welcome: 'வரவேற்கிறோம்',
             sos_warning: '🚨 அவசர SOS செயலில் உள்ளது',
+            pnr_enquiry: 'பிஎன்ஆர் விசாரணை',
+            agent_desk: 'முகவர் டெஸ்க்',
         }
     };
 
@@ -158,9 +166,17 @@ export default function AuthenticatedLayout({ header, children }) {
                                     <NavLink href={route('dashboard')} active={route().current('dashboard')} className={highContrast ? 'text-yellow-300 border-yellow-400' : 'text-slate-300 hover:text-orange-400'}>
                                         {t('dashboard')}
                                     </NavLink>
+                                    <NavLink href={route('pnr.checker')} active={route().current('pnr.checker')} className={highContrast ? 'text-yellow-300 border-yellow-400' : 'text-slate-300 hover:text-orange-400'}>
+                                        {t('pnr_enquiry')}
+                                    </NavLink>
                                     <NavLink href={route('complaints.index')} active={route().current('complaints.index')} className={highContrast ? 'text-yellow-300 border-yellow-400' : 'text-slate-300 hover:text-orange-400'}>
                                         {t('grievances')}
                                     </NavLink>
+                                    {user.role === 'agent' && (
+                                        <NavLink href={route('agent.dashboard')} active={route().current('agent.dashboard')} className={highContrast ? 'text-yellow-300 border-yellow-400' : 'text-slate-300 hover:text-orange-400'}>
+                                            💼 {t('agent_desk')}
+                                        </NavLink>
+                                    )}
                                     {user.role === 'admin' && (
                                         <NavLink href={route('dashboard')} active={false} className="text-rose-400 hover:text-rose-300 font-semibold border-rose-500/20">
                                             ⚙️ {t('admin_area')}
@@ -285,7 +301,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                                     }`}
                                                 >
                                                     <span className="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-ping"></span>
-                                                    {user.name} ({user.role === 'admin' ? 'Admin' : 'Passenger'})
+                                                    {user.name} ({user.role === 'admin' ? 'Admin' : (user.role === 'agent' ? 'Agent' : 'Passenger')})
                                                     <svg className="ms-2 -me-0.5 h-4 w-4 opacity-60" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"/>
                                                     </svg>
@@ -333,9 +349,17 @@ export default function AuthenticatedLayout({ header, children }) {
                             <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')} className="text-inherit">
                                 {t('dashboard')}
                             </ResponsiveNavLink>
+                            <ResponsiveNavLink href={route('pnr.checker')} active={route().current('pnr.checker')} className="text-inherit">
+                                {t('pnr_enquiry')}
+                            </ResponsiveNavLink>
                             <ResponsiveNavLink href={route('complaints.index')} active={route().current('complaints.index')} className="text-inherit">
                                 {t('grievances')}
                             </ResponsiveNavLink>
+                            {user.role === 'agent' && (
+                                <ResponsiveNavLink href={route('agent.dashboard')} active={route().current('agent.dashboard')} className="text-inherit">
+                                    💼 {t('agent_desk')}
+                                </ResponsiveNavLink>
+                            )}
                         </div>
 
                         <div className="border-t border-slate-800 pb-3 pt-3">

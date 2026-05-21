@@ -39,6 +39,15 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
+        $agent = User::create([
+            'name' => 'Bharat Agent Services',
+            'email' => 'agent@railway.gov.in',
+            'password' => Hash::make('agent123'),
+            'role' => 'agent',
+            'wallet_balance' => 10000.00,
+            'email_verified_at' => now(),
+        ]);
+
         $fakePassengers = [];
         $names = ['Amit Kumar', 'Priya Patel', 'Rahul Singh', 'Neha Sharma', 'Rohan Verma', 'Anjali Gupta'];
         foreach ($names as $idx => $name) {
@@ -489,5 +498,29 @@ class DatabaseSeeder extends Seeder
             'message' => 'Your complaint ticket regarding Cold meals served in B1 coach has been resolved. The refund has been initiated.',
             'read_status' => 'Unread',
         ]);
+
+        // 10. Seed Meal Options
+        $mealItems = [
+            ['item_name' => 'North Indian Veg Thali', 'description' => 'Dal makhani, paneer, 2 roti, rice, sweet', 'price' => 150.00],
+            ['item_name' => 'Chicken Biryani Combo', 'description' => 'Flavorful basmati rice with chicken, raita, salad', 'price' => 220.00],
+            ['item_name' => 'South Indian Masala Dosa', 'description' => 'Crispy crepe with potato filling, sambar, chutney', 'price' => 110.00],
+            ['item_name' => 'Kolkata Rosogolla Pack', 'description' => 'Box of 4 soft spongy syrup sweets', 'price' => 80.00],
+            ['item_name' => 'Paneer Butter Masala Combo', 'description' => 'Creamy paneer gravy with 3 butter rotis or jeera rice', 'price' => 180.00],
+        ];
+
+        foreach (Station::all() as $station) {
+            foreach ($mealItems as $item) {
+                // Seed random subset for stations to make it realistic
+                if (rand(0, 4) > 0) {
+                    \App\Models\MealOption::create([
+                        'station_id' => $station->id,
+                        'item_name' => $item['item_name'],
+                        'description' => $item['description'],
+                        'price' => $item['price'],
+                        'is_available' => true,
+                    ]);
+                }
+            }
+        }
     }
 }

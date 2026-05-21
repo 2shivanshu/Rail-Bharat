@@ -113,8 +113,45 @@ class TrainController extends Controller
             ];
         }
 
+        // Calculate alternative suggestions on adjacent days
+        $alternatives = [];
+        $searchDate = Carbon::parse($dateStr);
+        for ($offset = -2; $offset <= 2; $offset++) {
+            if ($offset === 0) continue;
+            
+            $altDateObj = $searchDate->copy()->addDays($offset);
+            if ($altDateObj->isBefore(Carbon::today())) {
+                continue;
+            }
+            
+            $altDateStr = $altDateObj->format('Y-m-d');
+            $altDayOfWeek = $altDateObj->dayOfWeek === 0 ? 7 : $altDateObj->dayOfWeek;
+            
+            foreach ($matchingTrains as $train) {
+                $runsOn = explode(',', $train->runs_on);
+                if (!in_array($altDayOfWeek, $runsOn)) {
+                    continue;
+                }
+                
+                $sourceRoute = Route::where('train_id', $train->id)->where('station_id', $sourceStation->id)->first();
+                $destRoute = Route::where('train_id', $train->id)->where('station_id', $destStation->id)->first();
+                
+                if ($sourceRoute && $destRoute && $sourceRoute->stop_number < $destRoute->stop_number) {
+                    $alternatives[] = [
+                        'train_id' => $train->id,
+                        'train_number' => $train->train_number,
+                        'name' => $train->name,
+                        'date' => $altDateStr,
+                        'departure_time' => $sourceRoute->departure_time,
+                        'arrival_time' => $destRoute->arrival_time,
+                    ];
+                }
+            }
+        }
+
         return Inertia::render('TrainResults', [
             'trains' => $trainList,
+            'alternatives' => $alternatives,
             'source' => $sourceStation,
             'destination' => $destStation,
             'date' => $dateStr,
@@ -313,5 +350,142 @@ class TrainController extends Controller
     {
         $train->delete();
         return redirect()->back()->with('success', 'Train deleted successfully!');
+    }
+
+    /**
+     * Get GPS / Live tracking details
+     */
+    public function trackingDetails($scheduleId)
+    {
+        $schedule = Schedule::with(['train.routes.station'])->findOrFail($scheduleId);
+        $routes = $schedule->train->routes->sortBy('stop_number')->values();
+        
+        $delay = $schedule->delay_minutes;
+        $journeyDate = Carbon::parse($schedule->departure_date);
+        
+        $formattedRoutes = [];
+        $currentPosition = 0; // percentage
+        $status = 'Scheduled';
+        $currentStationId = null;
+        $nextStationId = null;
+        $transitProgress = 0; // progress between current and next station (0-100)
+
+        // Construct timestamps. If times roll over past midnight, increment the day.
+        $currentDay = $journeyDate->copy();
+        $lastTime = null;
+
+        foreach ($routes as $index => $route) {
+            $arrTimeRaw = $route->arrival_time;
+            $depTimeRaw = $route->departure_time;
+            
+            $arrTime = null;
+            $depTime = null;
+
+            if ($arrTimeRaw) {
+                if ($lastTime && $arrTimeRaw < $lastTime) {
+                    $currentDay->addDay();
+                }
+                $arrTime = Carbon::parse($currentDay->format('Y-m-d') . ' ' . $arrTimeRaw);
+                $lastTime = $arrTimeRaw;
+            }
+
+            if ($depTimeRaw) {
+                if ($lastTime && $depTimeRaw < $lastTime) {
+                    $currentDay->addDay();
+                }
+                $depTime = Carbon::parse($currentDay->format('Y-m-d') . ' ' . $depTimeRaw);
+                $lastTime = $depTimeRaw;
+            }
+
+            // Fill missing times for boundary checks
+            if (!$arrTime && $depTime) $arrTime = $depTime->copy();
+            if (!$depTime && $arrTime) $depTime = $arrTime->copy();
+
+            // Add delay
+            $actualArr = $arrTime ? $arrTime->copy()->addMinutes($delay) : null;
+            $actualDep = $depTime ? $depTime->copy()->addMinutes($delay) : null;
+
+            $formattedRoutes[] = [
+                'route_id' => $route->id,
+                'station_id' => $route->station_id,
+                'station_name' => $route->station->name,
+                'station_code' => $route->station->code,
+                'stop_number' => $route->stop_number,
+                'distance' => $route->distance_from_source,
+                'scheduled_arrival' => $arrTimeRaw,
+                'scheduled_departure' => $depTimeRaw,
+                'actual_arrival' => $actualArr ? $actualArr->format('H:i') : null,
+                'actual_departure' => $actualDep ? $actualDep->format('H:i') : null,
+                'raw_actual_arrival' => $actualArr ? $actualArr->toIso8601String() : null,
+                'raw_actual_departure' => $actualDep ? $actualDep->toIso8601String() : null,
+            ];
+        }
+
+        // Determine current transit state
+        $now = Carbon::now();
+        $totalStops = count($formattedRoutes);
+        
+        if ($totalStops > 0) {
+            $firstStop = $formattedRoutes[0];
+            $lastStop = $formattedRoutes[$totalStops - 1];
+            
+            $firstDep = $firstStop['raw_actual_departure'] ? Carbon::parse($firstStop['raw_actual_departure']) : null;
+            $lastArr = $lastStop['raw_actual_arrival'] ? Carbon::parse($lastStop['raw_actual_arrival']) : null;
+
+            if ($firstDep && $now->lessThan($firstDep)) {
+                $status = 'Not Started';
+                $currentPosition = 0;
+            } elseif ($lastArr && $now->greaterThanOrEqualTo($lastArr)) {
+                $status = 'Completed';
+                $currentPosition = 100;
+            } else {
+                for ($i = 0; $i < $totalStops; $i++) {
+                    $currStop = $formattedRoutes[$i];
+                    $currArr = $currStop['raw_actual_arrival'] ? Carbon::parse($currStop['raw_actual_arrival']) : null;
+                    $currDep = $currStop['raw_actual_departure'] ? Carbon::parse($currStop['raw_actual_departure']) : null;
+                    
+                    if ($currArr && $currDep && $now->greaterThanOrEqualTo($currArr) && $now->lessThanOrEqualTo($currDep)) {
+                        $status = 'At Station';
+                        $currentStationId = $currStop['station_id'];
+                        $currentPosition = ($i / ($totalStops - 1)) * 100;
+                        break;
+                    }
+                    
+                    if ($i < $totalStops - 1) {
+                        $nextStop = $formattedRoutes[$i + 1];
+                        $nextArr = $nextStop['raw_actual_arrival'] ? Carbon::parse($nextStop['raw_actual_arrival']) : null;
+                        
+                        if ($currDep && $nextArr && $now->greaterThan($currDep) && $now->lessThan($nextArr)) {
+                            $status = 'In Transit';
+                            $currentStationId = $currStop['station_id'];
+                            $nextStationId = $nextStop['station_id'];
+                            
+                            $durationSeconds = $nextArr->diffInSeconds($currDep);
+                            $elapsedSeconds = $now->diffInSeconds($currDep);
+                            $transitProgress = $durationSeconds > 0 ? ($elapsedSeconds / $durationSeconds) * 100 : 0;
+                            
+                            $posStart = ($i / ($totalStops - 1)) * 100;
+                            $posEnd = (($i + 1) / ($totalStops - 1)) * 100;
+                            $currentPosition = $posStart + (($posEnd - $posStart) * ($transitProgress / 100));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return Inertia::render('LiveTracking', [
+            'schedule' => $schedule,
+            'delay' => $delay,
+            'routes' => $formattedRoutes,
+            'tracking' => [
+                'status' => $status,
+                'current_position' => round($currentPosition, 2),
+                'current_station_id' => $currentStationId,
+                'next_station_id' => $nextStationId,
+                'transit_progress' => round($transitProgress, 2),
+                'last_updated' => now()->toIso8601String(),
+            ]
+        ]);
     }
 }

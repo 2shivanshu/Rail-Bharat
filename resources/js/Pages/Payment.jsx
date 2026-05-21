@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { useState, useEffect, useContext } from 'react';
 import { AccessibilityContext } from '@/Layouts/AuthenticatedLayout';
 
@@ -8,7 +8,12 @@ export default function Payment({ booking }) {
     const context = useContext(AccessibilityContext);
     const highContrast = context ? context.highContrast : false;
 
-    const [selectedMethod, setSelectedMethod] = useState('UPI');
+    const { auth = {} } = usePage().props;
+    const user = auth.user;
+    const isAgent = user?.role === 'agent';
+    const walletBalance = parseFloat(user?.wallet_balance || 0);
+
+    const [selectedMethod, setSelectedMethod] = useState(isAgent ? 'Wallet' : 'UPI');
     const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
     const [upiId, setUpiId] = useState('');
     const [processingPayment, setProcessingPayment] = useState(false);
@@ -109,8 +114,8 @@ export default function Payment({ booking }) {
                         <p className="text-[11px] opacity-50 mt-0.5">Choose a portal to simulate your payment settlement</p>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-3">
-                        {['UPI', 'Card', 'Netbanking'].map(method => (
+                    <div className={`grid gap-3 ${isAgent ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-3'}`}>
+                        {(isAgent ? ['UPI', 'Card', 'Netbanking', 'Wallet'] : ['UPI', 'Card', 'Netbanking']).map(method => (
                             <button
                                 key={method}
                                 type="button"
@@ -121,7 +126,7 @@ export default function Payment({ booking }) {
                                         : (highContrast ? 'border-yellow-400 text-yellow-300' : 'border-slate-850 hover:border-slate-800 text-slate-400 hover:text-slate-300')
                                 }`}
                             >
-                                {method === 'UPI' ? '📱 UPI' : method === 'Card' ? '💳 Card' : '🏦 Netbank'}
+                                {method === 'UPI' ? '📱 UPI' : method === 'Card' ? '💳 Card' : method === 'Netbanking' ? '🏦 Netbank' : '💼 Wallet'}
                             </button>
                         ))}
                     </div>
@@ -175,7 +180,7 @@ export default function Payment({ booking }) {
                         )}
 
                         {selectedMethod === 'Netbanking' && (
-                            <div className="space-y-1">
+                            <div className="space-y-1 text-left">
                                 <label className="text-[10px] font-bold uppercase text-slate-400">Select Bank</label>
                                 <select className="w-full text-xs rounded-xl px-3 py-2.5 bg-slate-950 border-slate-850 text-slate-200 focus:ring-orange-500 focus:ring-1 focus:outline-none">
                                     <option>State Bank of India (SBI)</option>
@@ -183,6 +188,25 @@ export default function Payment({ booking }) {
                                     <option>ICICI Bank</option>
                                     <option>Punjab National Bank (PNB)</option>
                                 </select>
+                            </div>
+                        )}
+
+                        {selectedMethod === 'Wallet' && (
+                            <div className="space-y-2 text-left">
+                                <div className="flex justify-between items-center text-xs">
+                                    <span className="font-bold uppercase text-slate-400">Agent Wallet Balance</span>
+                                    <span className={`font-mono font-extrabold ${walletBalance >= booking.total_fare ? 'text-emerald-400' : 'text-rose-450'}`}>
+                                        ₹{walletBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    </span>
+                                </div>
+                                <div className="h-px bg-slate-900 my-2"></div>
+                                <div className="text-[11px] opacity-75">
+                                    {walletBalance >= booking.total_fare ? (
+                                        <span className="text-emerald-400">✓ Balance is sufficient. Proceed to pay. You will earn a 2.0% cashback commission (₹{(booking.total_fare * 0.02).toFixed(2)}).</span>
+                                    ) : (
+                                        <span className="text-rose-400 font-bold">✗ Insufficient funds in wallet. Please deposit money in Agent Portal.</span>
+                                    )}
+                                </div>
                             </div>
                         )}
                     </div>
@@ -201,11 +225,13 @@ export default function Payment({ booking }) {
                         <button
                             type="button"
                             onClick={() => triggerPayment('Success')}
-                            disabled={processingPayment}
+                            disabled={processingPayment || (selectedMethod === 'Wallet' && walletBalance < booking.total_fare)}
                             className={`py-3.5 rounded-2xl font-bold text-xs tracking-wider uppercase transition-all flex items-center justify-center gap-1.5 shadow-md ${
-                                highContrast
-                                    ? 'bg-yellow-400 text-black border-2 border-yellow-400 font-extrabold'
-                                    : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/10'
+                                (processingPayment || (selectedMethod === 'Wallet' && walletBalance < booking.total_fare))
+                                    ? 'bg-slate-800 text-slate-500 border-slate-850 cursor-not-allowed'
+                                    : highContrast
+                                        ? 'bg-yellow-400 text-black border-2 border-yellow-400 font-extrabold'
+                                        : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/10'
                             }`}
                         >
                             {processingPayment ? 'Confirming...' : 'Simulate Success ➔'}

@@ -4,7 +4,7 @@ import { useState, useContext } from 'react';
 import { AccessibilityContext } from '@/Layouts/AuthenticatedLayout';
 
 export default function TrainResults(props) {
-    const { trains = [], source, destination, date, stations = [] } = props;
+    const { trains = [], alternatives = [], source, destination, date, stations = [] } = props;
     const { auth } = props;
 
     // Use Accessibility Settings from layout context
@@ -318,6 +318,80 @@ export default function TrainResults(props) {
                                 </div>
                             </div>
                         ))
+                    )}
+
+                    {/* Alternative Train Suggestions on Adjacent Days */}
+                    {alternatives.length > 0 && (
+                        <div className={`p-6 rounded-3xl border ${
+                            highContrast ? 'border-yellow-400 bg-black text-yellow-300' : 'bg-slate-900/10 border-slate-900'
+                        }`}>
+                            <h3 className="text-sm font-extrabold uppercase tracking-wider mb-2 flex items-center gap-2 text-slate-200">
+                                📅 Alternative Travel Options (Adjacent Days)
+                            </h3>
+                            <p className="text-xs text-slate-455 mb-4 font-semibold">
+                                Can't find seats or trains on your selected date? Check these suggestions within ±2 days:
+                            </p>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {alternatives.map((alt, index) => {
+                                    const altDateFormatted = new Date(alt.date).toLocaleDateString('en-IN', {
+                                        weekday: 'short',
+                                        day: 'numeric',
+                                        month: 'short'
+                                    });
+
+                                    return (
+                                        <div 
+                                            key={index}
+                                            className={`p-4 rounded-2xl border flex flex-col justify-between gap-3.5 ${
+                                                highContrast
+                                                    ? 'border-yellow-400 bg-black text-yellow-300'
+                                                    : 'bg-slate-950/40 border-slate-850 hover:border-slate-800 transition-all'
+                                            }`}
+                                        >
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <h4 className="font-extrabold text-sm text-slate-200">{alt.name}</h4>
+                                                    <span className="font-mono text-[10px] text-slate-400 font-bold">
+                                                        #{alt.train_number}
+                                                    </span>
+                                                </div>
+                                                <span className="text-xs px-2.5 py-1 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20 font-bold">
+                                                    {altDateFormatted}
+                                                </span>
+                                            </div>
+
+                                            <div className="flex justify-between items-center text-xs opacity-80 mt-1">
+                                                <div>
+                                                    <span className="opacity-50">Departs: </span>
+                                                    <span className="font-bold text-slate-350">{alt.departure_time.substring(0, 5)}</span>
+                                                </div>
+                                                <div>
+                                                    <span className="opacity-50">Arrives: </span>
+                                                    <span className="font-bold text-slate-350">{alt.arrival_time.substring(0, 5)}</span>
+                                                </div>
+                                            </div>
+
+                                            <Link
+                                                href={route('trains.search')}
+                                                data={{
+                                                    source: source.code,
+                                                    destination: destination.code,
+                                                    date: alt.date
+                                                }}
+                                                className={`w-full py-2.5 rounded-xl font-bold text-xs text-center transition-all ${
+                                                    highContrast
+                                                        ? 'bg-yellow-400 text-black border-2 border-yellow-400'
+                                                        : 'bg-orange-500/10 hover:bg-orange-500/20 text-orange-450 border border-orange-500/20 hover:border-orange-500/40'
+                                                }`}
+                                            >
+                                                View Availability for {altDateFormatted} ➔
+                                            </Link>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     )}
                 </div>
             </div>
