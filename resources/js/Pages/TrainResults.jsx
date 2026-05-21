@@ -49,8 +49,8 @@ export default function TrainResults(props) {
             train_id: train.id,
             schedule_id: train.schedule_id,
             class_type: clsType,
-            source: source.code,
-            destination: destination.code
+            source: train.is_reverse ? destination.code : source.code,
+            destination: train.is_reverse ? source.code : destination.code
         });
     };
 
@@ -196,7 +196,7 @@ export default function TrainResults(props) {
                             }`}>
                                 {/* Train name, type, and delay alerts */}
                                 <div className="flex flex-col sm:flex-row justify-between items-start gap-2 border-b border-slate-850 pb-4">
-                                    <div>
+    <div>
                                         <div className="flex items-center gap-2">
                                             <span className="font-extrabold text-lg text-slate-100">{train.name}</span>
                                             <span className="font-mono text-xs px-2.5 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-slate-300 font-bold">
@@ -205,6 +205,11 @@ export default function TrainResults(props) {
                                             <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-orange-500/10 text-orange-400 border border-orange-500/20">
                                                 {train.type}
                                             </span>
+                                            {train.is_reverse && (
+                                                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                                                    Return Journey
+                                                </span>
+                                            )}
                                         </div>
                                         <button
                                             onClick={() => handleViewRoute(train)}
@@ -235,8 +240,8 @@ export default function TrainResults(props) {
                                 <div className="grid grid-cols-3 items-center text-center py-2 max-w-xl">
                                     <div className="text-left">
                                         <div className="text-lg font-bold text-slate-100">{train.source_departure.substring(0, 5)}</div>
-                                        <div className="text-xs opacity-60 font-semibold mt-0.5">{source.code}</div>
-                                        <div className="text-[10px] opacity-40 mt-0.5">{source.name}</div>
+                                        <div className="text-xs opacity-60 font-semibold mt-0.5">{train.is_reverse ? destination.code : source.code}</div>
+                                        <div className="text-[10px] opacity-40 mt-0.5">{train.is_reverse ? destination.name : source.name}</div>
                                     </div>
 
                                     <div className="relative px-4">
@@ -254,8 +259,8 @@ export default function TrainResults(props) {
 
                                     <div className="text-right">
                                         <div className="text-lg font-bold text-slate-100">{train.dest_arrival.substring(0, 5)}</div>
-                                        <div className="text-xs opacity-60 font-semibold mt-0.5">{destination.code}</div>
-                                        <div className="text-[10px] opacity-40 mt-0.5">{destination.name}</div>
+                                        <div className="text-xs opacity-60 font-semibold mt-0.5">{train.is_reverse ? source.code : destination.code}</div>
+                                        <div className="text-[10px] opacity-40 mt-0.5">{train.is_reverse ? source.name : destination.name}</div>
                                     </div>
                                 </div>
 

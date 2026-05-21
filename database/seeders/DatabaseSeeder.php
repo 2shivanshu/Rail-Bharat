@@ -70,6 +70,98 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Lucknow Charbagh', 'code' => 'LKO', 'city' => 'Lucknow'],
             ['name' => 'Patna Junction', 'code' => 'PNBE', 'city' => 'Patna'],
             ['name' => 'Gorakhpur Junction', 'code' => 'GKP', 'city' => 'Gorakhpur'],
+            ['name' => 'Ahmedabad Junction', 'code' => 'ADI', 'city' => 'Ahmedabad'],
+            ['name' => 'Pune Junction', 'code' => 'PUNE', 'city' => 'Pune'],
+            ['name' => 'Secunderabad Junction', 'code' => 'SC', 'city' => 'Hyderabad'],
+            ['name' => 'Kanpur Central', 'code' => 'CNB', 'city' => 'Kanpur'],
+            ['name' => 'Jaipur Junction', 'code' => 'JP', 'city' => 'Jaipur'],
+            ['name' => 'Bhopal Junction', 'code' => 'BPL', 'city' => 'Bhopal'],
+            ['name' => 'Nagpur Junction', 'code' => 'NGP', 'city' => 'Nagpur'],
+            ['name' => 'Visakhapatnam Junction', 'code' => 'VSKP', 'city' => 'Visakhapatnam'],
+            ['name' => 'Ranchi Junction', 'code' => 'RNC', 'city' => 'Ranchi'],
+            ['name' => 'Bhubaneswar', 'code' => 'BBS', 'city' => 'Bhubaneswar'],
+            ['name' => 'Guwahati', 'code' => 'GHY', 'city' => 'Guwahati'],
+            ['name' => 'Dehradun', 'code' => 'DDN', 'city' => 'Dehradun'],
+            ['name' => 'Jammu Tawi', 'code' => 'JAT', 'city' => 'Jammu'],
+            ['name' => 'Amritsar Junction', 'code' => 'ASR', 'city' => 'Amritsar'],
+            ['name' => 'Chandigarh Junction', 'code' => 'CDG', 'city' => 'Chandigarh'],
+            ['name' => 'Varanasi Junction', 'code' => 'BSB', 'city' => 'Varanasi'],
+            ['name' => 'Prayagraj Junction', 'code' => 'PRYJ', 'city' => 'Prayagraj'],
+            ['name' => 'Agra Cantt.', 'code' => 'AGC', 'city' => 'Agra'],
+            ['name' => 'Gwalior Junction', 'code' => 'GWL', 'city' => 'Gwalior'],
+            ['name' => 'VGL Jhansi Junction', 'code' => 'VGLJ', 'city' => 'Jhansi'],
+            ['name' => 'Indore Junction', 'code' => 'INDB', 'city' => 'Indore'],
+            ['name' => 'Jabalpur Junction', 'code' => 'JBP', 'city' => 'Jabalpur'],
+            ['name' => 'Raipur Junction', 'code' => 'R', 'city' => 'Raipur'],
+            ['name' => 'Bilaspur Junction', 'code' => 'BSP', 'city' => 'Bilaspur'],
+            ['name' => 'Cuttack Junction', 'code' => 'CTC', 'city' => 'Cuttack'],
+            ['name' => 'Puri', 'code' => 'PURI', 'city' => 'Puri'],
+            ['name' => 'Rourkela Junction', 'code' => 'ROU', 'city' => 'Rourkela'],
+            ['name' => 'Tatanagar Junction', 'code' => 'TATA', 'city' => 'Jamshedpur'],
+            ['name' => 'Dhanbad Junction', 'code' => 'DHN', 'city' => 'Dhanbad'],
+            ['name' => 'Gaya Junction', 'code' => 'GAYA', 'city' => 'Gaya'],
+            ['name' => 'Muzaffarpur Junction', 'code' => 'MFP', 'city' => 'Muzaffarpur'],
+            ['name' => 'Bhagalpur Junction', 'code' => 'BGP', 'city' => 'Bhagalpur'],
+            ['name' => 'Darbhanga Junction', 'code' => 'DBG', 'city' => 'Darbhanga'],
+            ['name' => 'New Jalpaiguri', 'code' => 'NJP', 'city' => 'Siliguri'],
+            ['name' => 'Asansol Junction', 'code' => 'ASN', 'city' => 'Asansol'],
+            ['name' => 'Kharagpur Junction', 'code' => 'KGP', 'city' => 'Kharagpur'],
+            ['name' => 'Balasore', 'code' => 'BLS', 'city' => 'Balasore'],
+            ['name' => 'Vijayawada Junction', 'code' => 'BZA', 'city' => 'Vijayawada'],
+            ['name' => 'Nellore', 'code' => 'NLR', 'city' => 'Nellore'],
+            ['name' => 'Tirupati', 'code' => 'TPTY', 'city' => 'Tirupati'],
+            ['name' => 'Coimbatore Junction', 'code' => 'CBE', 'city' => 'Coimbatore'],
+            ['name' => 'Madurai Junction', 'code' => 'MDU', 'city' => 'Madurai'],
+            ['name' => 'Tiruchchirappalli Junction', 'code' => 'TPJ', 'city' => 'Trichy'],
+            ['name' => 'Salem Junction', 'code' => 'SA', 'city' => 'Salem'],
+            ['name' => 'Ernakulam Junction', 'code' => 'ERS', 'city' => 'Kochi'],
+            ['name' => 'Kozhikode Main', 'code' => 'CLT', 'city' => 'Kozhikode'],
+            ['name' => 'Thiruvananthapuram Central', 'code' => 'TVC', 'city' => 'Trivandrum'],
+            ['name' => 'Mangaluru Central', 'code' => 'MAQ', 'city' => 'Mangalore'],
+            ['name' => 'Mysuru Junction', 'code' => 'MYS', 'city' => 'Mysore'],
+            ['name' => 'Hubballi Junction', 'code' => 'UBL', 'city' => 'Hubli'],
+            ['name' => 'Belagavi', 'code' => 'BGM', 'city' => 'Belgaum'],
+            ['name' => 'Madgaon Junction', 'code' => 'MAO', 'city' => 'Goa'],
+            ['name' => 'Kolhapur SCSMT', 'code' => 'KOP', 'city' => 'Kolhapur'],
+            ['name' => 'Solapur', 'code' => 'SUR', 'city' => 'Solapur'],
+            ['name' => 'Aurangabad', 'code' => 'AWB', 'city' => 'Aurangabad'],
+            ['name' => 'Hazur Sahib Nanded', 'code' => 'NED', 'city' => 'Nanded'],
+            ['name' => 'Nashik Road', 'code' => 'NK', 'city' => 'Nashik'],
+            ['name' => 'Vadodara Junction', 'code' => 'BRC', 'city' => 'Vadodara'],
+            ['name' => 'Surat', 'code' => 'ST', 'city' => 'Surat'],
+            ['name' => 'Rajkot Junction', 'code' => 'RJT', 'city' => 'Rajkot'],
+            ['name' => 'Bhavnagar Terminus', 'code' => 'BVC', 'city' => 'Bhavnagar'],
+            ['name' => 'Udaipur City', 'code' => 'UDZ', 'city' => 'Udaipur'],
+            ['name' => 'Ajmer Junction', 'code' => 'AII', 'city' => 'Ajmer'],
+            ['name' => 'Jodhpur Junction', 'code' => 'JU', 'city' => 'Jodhpur'],
+            ['name' => 'Bikaner Junction', 'code' => 'BKN', 'city' => 'Bikaner'],
+            ['name' => 'Kota Junction', 'code' => 'KOTA', 'city' => 'Kota'],
+            ['name' => 'Ujjain Junction', 'code' => 'UJN', 'city' => 'Ujjain'],
+            ['name' => 'Ratlam Junction', 'code' => 'RTM', 'city' => 'Ratlam'],
+            ['name' => 'Mathura Junction', 'code' => 'MTJ', 'city' => 'Mathura'],
+            ['name' => 'Aligarh Junction', 'code' => 'ALJN', 'city' => 'Aligarh'],
+            ['name' => 'Bareilly Junction', 'code' => 'BE', 'city' => 'Bareilly'],
+            ['name' => 'Moradabad Junction', 'code' => 'MB', 'city' => 'Moradabad'],
+            ['name' => 'Saharanpur Junction', 'code' => 'SRE', 'city' => 'Saharanpur'],
+            ['name' => 'Haridwar', 'code' => 'HW', 'city' => 'Haridwar'],
+            ['name' => 'Roorkee', 'code' => 'RK', 'city' => 'Roorkee'],
+            ['name' => 'Ambala Cantt. Junction', 'code' => 'UMB', 'city' => 'Ambala'],
+            ['name' => 'Ludhiana Junction', 'code' => 'LDH', 'city' => 'Ludhiana'],
+            ['name' => 'Jalandhar City Junction', 'code' => 'JUC', 'city' => 'Jalandhar'],
+            ['name' => 'Pathankot Cantt.', 'code' => 'PTKC', 'city' => 'Pathankot'],
+            ['name' => 'Udhampur', 'code' => 'UHP', 'city' => 'Udhampur'],
+            ['name' => 'Katara Jammu', 'code' => 'SVDK', 'city' => 'Katra'],
+            ['name' => 'Shalimar', 'code' => 'SHM', 'city' => 'Kolkata'],
+            ['name' => 'Sealdah', 'code' => 'SDAH', 'city' => 'Kolkata'],
+            ['name' => 'Bandra Terminus', 'code' => 'BDTS', 'city' => 'Mumbai'],
+            ['name' => 'Mumbai Central', 'code' => 'MMCT', 'city' => 'Mumbai'],
+            ['name' => 'Lokmanya Tilak Terminus', 'code' => 'LTT', 'city' => 'Mumbai'],
+            ['name' => 'Yesvantpur Junction', 'code' => 'YPR', 'city' => 'Bengaluru'],
+            ['name' => 'Kachiguda', 'code' => 'KCG', 'city' => 'Hyderabad'],
+            ['name' => 'Chennai Egmore', 'code' => 'MS', 'city' => 'Chennai'],
+            ['name' => 'Tambaram', 'code' => 'TBM', 'city' => 'Chennai'],
+            ['name' => 'Anand Vihar Terminus', 'code' => 'ANVT', 'city' => 'Delhi'],
+            ['name' => 'Hazrat Nizamuddin', 'code' => 'NZM', 'city' => 'Delhi']
         ];
 
         $stations = [];
@@ -77,182 +169,329 @@ class DatabaseSeeder extends Seeder
             $stations[$s['code']] = Station::create($s);
         }
 
-        // 3. Create Trains
-        $trainsData = [
+        // 3. Create Bidirectional Trains & Routes (25 routes * 2 = 50 trains)
+        $routesConfig = [
             [
-                'train_number' => '12301',
-                'name' => 'Howrah Rajdhani Express',
-                'type' => 'Rajdhani',
-                'source_station_id' => $stations['NDLS']->id,
-                'destination_station_id' => $stations['HWH']->id,
-                'runs_on' => '1,2,3,4,5,6,7',
+                'forward_no' => '12301', 'reverse_no' => '12302',
+                'forward_name' => 'Howrah Rajdhani Express', 'reverse_name' => 'Kolkata New Delhi Rajdhani Express',
+                'type' => 'Rajdhani', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'NDLS', 'arr' => null, 'dep' => '16:55:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'PNBE', 'arr' => '05:45:00', 'dep' => '05:55:00', 'dist' => 998, 'fare' => 1.20],
+                    ['code' => 'HWH', 'arr' => '12:15:00', 'dep' => null, 'dist' => 1450, 'fare' => 1.40],
+                ]
             ],
             [
-                'train_number' => '12002',
-                'name' => 'New Delhi Shatabdi Express',
-                'type' => 'Shatabdi',
-                'source_station_id' => $stations['NDLS']->id,
-                'destination_station_id' => $stations['LKO']->id,
-                'runs_on' => '1,2,3,4,5,6,7',
+                'forward_no' => '12004', 'reverse_no' => '12003',
+                'forward_name' => 'Lucknow Swarn Shatabdi Express', 'reverse_name' => 'New Delhi Swarn Shatabdi Express',
+                'type' => 'Shatabdi', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'NDLS', 'arr' => null, 'dep' => '06:10:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'CNB', 'arr' => '11:20:00', 'dep' => '11:25:00', 'dist' => 440, 'fare' => 1.15],
+                    ['code' => 'LKO', 'arr' => '12:40:00', 'dep' => null, 'dist' => 512, 'fare' => 1.25],
+                ]
             ],
             [
-                'train_number' => '22692',
-                'name' => 'Hazrat Nizamuddin Bengaluru Rajdhani',
-                'type' => 'Rajdhani',
-                'source_station_id' => $stations['NDLS']->id,
-                'destination_station_id' => $stations['SBC']->id,
-                'runs_on' => '1,3,4,6',
+                'forward_no' => '22692', 'reverse_no' => '22691',
+                'forward_name' => 'Hazrat Nizamuddin Bengaluru Rajdhani', 'reverse_name' => 'Bengaluru Hazrat Nizamuddin Rajdhani',
+                'type' => 'Rajdhani', 'runs_on' => '1,3,4,6',
+                'stops' => [
+                    ['code' => 'NDLS', 'arr' => null, 'dep' => '19:50:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'SC', 'arr' => '14:20:00', 'dep' => '14:35:00', 'dist' => 1670, 'fare' => 1.35],
+                    ['code' => 'SBC', 'arr' => '05:20:00', 'dep' => null, 'dist' => 2365, 'fare' => 1.50],
+                ]
             ],
             [
-                'train_number' => '12626' ,
-                'name' => 'Kerala Express',
-                'type' => 'Superfast',
-                'source_station_id' => $stations['NDLS']->id,
-                'destination_station_id' => $stations['MAS']->id,
-                'runs_on' => '1,2,3,4,5,6,7',
+                'forward_no' => '12616', 'reverse_no' => '12615',
+                'forward_name' => 'Grand Trunk Express', 'reverse_name' => 'Grand Trunk Express (Reverse)',
+                'type' => 'Superfast', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'NDLS', 'arr' => null, 'dep' => '18:40:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'BPL', 'arr' => '05:25:00', 'dep' => '05:30:00', 'dist' => 700, 'fare' => 1.20],
+                    ['code' => 'MAS', 'arr' => '06:20:00', 'dep' => null, 'dist' => 2182, 'fare' => 1.45],
+                ]
             ],
             [
-                'train_number' => '12138',
-                'name' => 'Punjab Mail',
-                'type' => 'Express',
-                'source_station_id' => $stations['CSTM']->id,
-                'destination_station_id' => $stations['NDLS']->id,
-                'runs_on' => '1,2,3,4,5,6,7',
+                'forward_no' => '12137', 'reverse_no' => '12138',
+                'forward_name' => 'Punjab Mail (NDLS to CSTM)', 'reverse_name' => 'Punjab Mail (CSTM to NDLS)',
+                'type' => 'Express', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'NDLS', 'arr' => null, 'dep' => '21:40:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'ADI', 'arr' => '10:15:00', 'dep' => '10:30:00', 'dist' => 960, 'fare' => 1.25],
+                    ['code' => 'CSTM', 'arr' => '19:35:00', 'dep' => null, 'dist' => 1540, 'fare' => 1.40],
+                ]
             ],
+            [
+                'forward_no' => '12958', 'reverse_no' => '12957',
+                'forward_name' => 'Swarna Jayanti Rajdhani', 'reverse_name' => 'Swarna Jayanti Rajdhani (Reverse)',
+                'type' => 'Rajdhani', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'NDLS', 'arr' => null, 'dep' => '19:55:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'JP', 'arr' => '00:30:00', 'dep' => '00:40:00', 'dist' => 308, 'fare' => 1.15],
+                    ['code' => 'ADI', 'arr' => '08:40:00', 'dep' => null, 'dist' => 930, 'fare' => 1.35],
+                ]
+            ],
+            [
+                'forward_no' => '12264', 'reverse_no' => '12263',
+                'forward_name' => 'Pune Duronto Express', 'reverse_name' => 'Pune Duronto Express (Reverse)',
+                'type' => 'Superfast', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'NDLS', 'arr' => null, 'dep' => '11:10:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'BRC', 'arr' => '22:30:00', 'dep' => '22:40:00', 'dist' => 992, 'fare' => 1.25],
+                    ['code' => 'PUNE', 'arr' => '07:10:00', 'dep' => null, 'dist' => 1520, 'fare' => 1.45],
+                ]
+            ],
+            [
+                'forward_no' => '12425', 'reverse_no' => '12426',
+                'forward_name' => 'Jammu Rajdhani Express', 'reverse_name' => 'New Delhi Jammu Rajdhani',
+                'type' => 'Rajdhani', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'NDLS', 'arr' => null, 'dep' => '20:40:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'LDH', 'arr' => '01:15:00', 'dep' => '01:25:00', 'dist' => 312, 'fare' => 1.15],
+                    ['code' => 'JAT', 'arr' => '05:45:00', 'dep' => null, 'dist' => 577, 'fare' => 1.30],
+                ]
+            ],
+            [
+                'forward_no' => '22439', 'reverse_no' => '22440',
+                'forward_name' => 'New Delhi Katra Vande Bharat', 'reverse_name' => 'Katra New Delhi Vande Bharat',
+                'type' => 'Superfast', 'runs_on' => '1,2,3,4,6,7',
+                'stops' => [
+                    ['code' => 'NDLS', 'arr' => null, 'dep' => '06:00:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'UMB', 'arr' => '08:10:00', 'dep' => '08:12:00', 'dist' => 199, 'fare' => 1.10],
+                    ['code' => 'SVDK', 'arr' => '14:00:00', 'dep' => null, 'dist' => 655, 'fare' => 1.35],
+                ]
+            ],
+            [
+                'forward_no' => '12013', 'reverse_no' => '12014',
+                'forward_name' => 'Amritsar Shatabdi Express', 'reverse_name' => 'New Delhi Amritsar Shatabdi',
+                'type' => 'Shatabdi', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'NDLS', 'arr' => null, 'dep' => '16:30:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'JUC', 'arr' => '21:15:00', 'dep' => '21:17:00', 'dist' => 370, 'fare' => 1.15],
+                    ['code' => 'ASR', 'arr' => '22:30:00', 'dep' => null, 'dist' => 448, 'fare' => 1.25],
+                ]
+            ],
+            [
+                'forward_no' => '22812', 'reverse_no' => '22811',
+                'forward_name' => 'Bhubaneswar Rajdhani Express', 'reverse_name' => 'New Delhi Bhubaneswar Rajdhani',
+                'type' => 'Rajdhani', 'runs_on' => '2,3,5,6',
+                'stops' => [
+                    ['code' => 'NDLS', 'arr' => null, 'dep' => '17:05:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'TATA', 'arr' => '10:35:00', 'dep' => '10:45:00', 'dist' => 1341, 'fare' => 1.30],
+                    ['code' => 'BBS', 'arr' => '16:15:00', 'dep' => null, 'dist' => 1730, 'fare' => 1.45],
+                ]
+            ],
+            [
+                'forward_no' => '12424', 'reverse_no' => '12423',
+                'forward_name' => 'Dibrugarh Rajdhani Express', 'reverse_name' => 'New Delhi Dibrugarh Rajdhani',
+                'type' => 'Rajdhani', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'NDLS', 'arr' => null, 'dep' => '16:10:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'NJP', 'arr' => '13:15:00', 'dep' => '13:25:00', 'dist' => 1466, 'fare' => 1.30],
+                    ['code' => 'GHY', 'arr' => '20:10:00', 'dep' => null, 'dist' => 2050, 'fare' => 1.45],
+                ]
+            ],
+            [
+                'forward_no' => '12859', 'reverse_no' => '12860',
+                'forward_name' => 'Gitanjali Express', 'reverse_name' => 'Gitanjali Express (Reverse)',
+                'type' => 'Superfast', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'CSTM', 'arr' => null, 'dep' => '06:00:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'NGP', 'arr' => '18:55:00', 'dep' => '19:00:00', 'dist' => 837, 'fare' => 1.20],
+                    ['code' => 'HWH', 'arr' => '12:30:00', 'dep' => null, 'dist' => 1968, 'fare' => 1.45],
+                ]
+            ],
+            [
+                'forward_no' => '12863', 'reverse_no' => '12864',
+                'forward_name' => 'Howrah Yesvantpur Express', 'reverse_name' => 'Yesvantpur Howrah Express',
+                'type' => 'Express', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'HWH', 'arr' => null, 'dep' => '22:55:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'VSKP', 'arr' => '12:45:00', 'dep' => '13:05:00', 'dist' => 878, 'fare' => 1.20],
+                    ['code' => 'SBC', 'arr' => '07:15:00', 'dep' => null, 'dist' => 1954, 'fare' => 1.45],
+                ]
+            ],
+            [
+                'forward_no' => '12028', 'reverse_no' => '12027',
+                'forward_name' => 'Bengaluru Chennai Shatabdi', 'reverse_name' => 'Chennai Bengaluru Shatabdi',
+                'type' => 'Shatabdi', 'runs_on' => '1,2,4,5,6,7',
+                'stops' => [
+                    ['code' => 'SBC', 'arr' => null, 'dep' => '06:00:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'SA', 'arr' => '09:05:00', 'dep' => '09:10:00', 'dist' => 200, 'fare' => 1.10],
+                    ['code' => 'MAS', 'arr' => '11:00:00', 'dep' => null, 'dist' => 362, 'fare' => 1.20],
+                ]
+            ],
+            [
+                'forward_no' => '12841', 'reverse_no' => '12842',
+                'forward_name' => 'Coromandel Express', 'reverse_name' => 'Coromandel Express (Reverse)',
+                'type' => 'Superfast', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'HWH', 'arr' => null, 'dep' => '15:20:05', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'BBS', 'arr' => '21:40:00', 'dep' => '21:45:00', 'dist' => 437, 'fare' => 1.15],
+                    ['code' => 'MAS', 'arr' => '11:15:00', 'dep' => null, 'dist' => 1659, 'fare' => 1.40],
+                ]
+            ],
+            [
+                'forward_no' => '11013', 'reverse_no' => '11014',
+                'forward_name' => 'Mumbai Bengaluru Express', 'reverse_name' => 'Bengaluru Mumbai Express',
+                'type' => 'Express', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'CSTM', 'arr' => null, 'dep' => '22:35:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'PUNE', 'arr' => '02:00:00', 'dep' => '02:05:00', 'dist' => 192, 'fare' => 1.10],
+                    ['code' => 'SBC', 'arr' => '21:10:00', 'dep' => null, 'dist' => 1135, 'fare' => 1.35],
+                ]
+            ],
+            [
+                'forward_no' => '22159', 'reverse_no' => '22160',
+                'forward_name' => 'Mumbai Chennai Mail', 'reverse_name' => 'Chennai Mumbai Mail',
+                'type' => 'Express', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'CSTM', 'arr' => null, 'dep' => '12:45:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'SUR', 'arr' => '20:15:00', 'dep' => '20:20:00', 'dist' => 455, 'fare' => 1.15],
+                    ['code' => 'MAS', 'arr' => '10:45:00', 'dep' => null, 'dist' => 1284, 'fare' => 1.35],
+                ]
+            ],
+            [
+                'forward_no' => '13240', 'reverse_no' => '13239',
+                'forward_name' => 'Lucknow Patna Express', 'reverse_name' => 'Patna Lucknow Express',
+                'type' => 'Express', 'runs_on' => '2,4,6,7',
+                'stops' => [
+                    ['code' => 'LKO', 'arr' => null, 'dep' => '23:10:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'BSB', 'arr' => '05:30:00', 'dep' => '05:40:00', 'dist' => 301, 'fare' => 1.15],
+                    ['code' => 'PNBE', 'arr' => '10:30:00', 'dep' => null, 'dist' => 530, 'fare' => 1.30],
+                ]
+            ],
+            [
+                'forward_no' => '12916', 'reverse_no' => '12915',
+                'forward_name' => 'Ashram Express (Jaipur to ADI)', 'reverse_name' => 'Ashram Express (ADI to Jaipur)',
+                'type' => 'Superfast', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'JP', 'arr' => null, 'dep' => '20:25:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'UDZ', 'arr' => '02:30:00', 'dep' => '02:40:00', 'dist' => 432, 'fare' => 1.15],
+                    ['code' => 'ADI', 'arr' => '08:15:00', 'dep' => null, 'dist' => 687, 'fare' => 1.30],
+                ]
+            ],
+            [
+                'forward_no' => '19711', 'reverse_no' => '19712',
+                'forward_name' => 'Jaipur Bhopal Express', 'reverse_name' => 'Bhopal Jaipur Express',
+                'type' => 'Express', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'JP', 'arr' => null, 'dep' => '18:25:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'UJN', 'arr' => '04:10:00', 'dep' => '04:20:00', 'dist' => 520, 'fare' => 1.20],
+                    ['code' => 'BPL', 'arr' => '07:20:00', 'dep' => null, 'dist' => 705, 'fare' => 1.30],
+                ]
+            ],
+            [
+                'forward_no' => '19303', 'reverse_no' => '19304',
+                'forward_name' => 'Indore Bhopal Express', 'reverse_name' => 'Bhopal Indore Express',
+                'type' => 'Express', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'INDB', 'arr' => null, 'dep' => '23:15:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'UJN', 'arr' => '00:40:00', 'dep' => '00:45:00', 'dist' => 80, 'fare' => 1.05],
+                    ['code' => 'BPL', 'arr' => '03:45:00', 'dep' => null, 'dist' => 263, 'fare' => 1.20],
+                ]
+            ],
+            [
+                'forward_no' => '12334', 'reverse_no' => '12333',
+                'forward_name' => 'Vibhuti Express (BSB to PNBE)', 'reverse_name' => 'Vibhuti Express (PNBE to BSB)',
+                'type' => 'Express', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'BSB', 'arr' => null, 'dep' => '18:00:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'GAYA', 'arr' => '22:10:00', 'dep' => '22:20:00', 'dist' => 220, 'fare' => 1.10],
+                    ['code' => 'PNBE', 'arr' => '00:45:00', 'dep' => null, 'dist' => 312, 'fare' => 1.20],
+                ]
+            ],
+            [
+                'forward_no' => '14204', 'reverse_no' => '14203',
+                'forward_name' => 'Lucknow Varanasi Intercity', 'reverse_name' => 'Varanasi Lucknow Intercity',
+                'type' => 'Express', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'LKO', 'arr' => null, 'dep' => '07:00:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'PRYJ', 'arr' => '10:45:00', 'dep' => '10:55:00', 'dist' => 200, 'fare' => 1.10],
+                    ['code' => 'BSB', 'arr' => '12:30:00', 'dep' => null, 'dist' => 320, 'fare' => 1.20],
+                ]
+            ],
+            [
+                'forward_no' => '12017', 'reverse_no' => '12018',
+                'forward_name' => 'Dehradun Shatabdi Express', 'reverse_name' => 'New Delhi Dehradun Shatabdi',
+                'type' => 'Shatabdi', 'runs_on' => '1,2,3,4,5,6,7',
+                'stops' => [
+                    ['code' => 'NDLS', 'arr' => null, 'dep' => '06:45:00', 'dist' => 0, 'fare' => 1.00],
+                    ['code' => 'HW', 'arr' => '11:20:00', 'dep' => '11:25:00', 'dist' => 250, 'fare' => 1.15],
+                    ['code' => 'DDN', 'arr' => '12:50:00', 'dep' => null, 'dist' => 305, 'fare' => 1.25],
+                ]
+            ]
         ];
 
         $trains = [];
-        foreach ($trainsData as $t) {
-            $trains[$t['train_number']] = Train::create($t);
+        foreach ($routesConfig as $cfg) {
+            // Forward Train
+            $forwardTrain = Train::create([
+                'train_number' => $cfg['forward_no'],
+                'name' => $cfg['forward_name'],
+                'type' => $cfg['type'],
+                'source_station_id' => $stations[$cfg['stops'][0]['code']]->id,
+                'destination_station_id' => $stations[$cfg['stops'][count($cfg['stops']) - 1]['code']]->id,
+                'runs_on' => $cfg['runs_on'],
+            ]);
+
+            foreach ($cfg['stops'] as $index => $stop) {
+                Route::create([
+                    'train_id' => $forwardTrain->id,
+                    'station_id' => $stations[$stop['code']]->id,
+                    'stop_number' => $index + 1,
+                    'arrival_time' => $stop['arr'],
+                    'departure_time' => $stop['dep'],
+                    'distance_from_source' => $stop['dist'],
+                    'fare_factor' => $stop['fare'],
+                ]);
+            }
+            $trains[$forwardTrain->train_number] = $forwardTrain;
+
+            // Reverse Train
+            $reverseTrain = Train::create([
+                'train_number' => $cfg['reverse_no'],
+                'name' => $cfg['reverse_name'],
+                'type' => $cfg['type'],
+                'source_station_id' => $stations[$cfg['stops'][count($cfg['stops']) - 1]['code']]->id,
+                'destination_station_id' => $stations[$cfg['stops'][0]['code']]->id,
+                'runs_on' => $cfg['runs_on'],
+            ]);
+
+            $reversedStops = array_reverse($cfg['stops']);
+            $totalDistance = $cfg['stops'][count($cfg['stops']) - 1]['dist'];
+
+            foreach ($reversedStops as $index => $stop) {
+                $isFirst = ($index === 0);
+                $isLast = ($index === count($reversedStops) - 1);
+
+                $dist = $totalDistance - $stop['dist'];
+                $totalFareFactor = $cfg['stops'][count($cfg['stops']) - 1]['fare'];
+                $fare = 1.00 + ($totalFareFactor - $stop['fare']);
+
+                $arrTime = null;
+                $depTime = null;
+                if ($isFirst) {
+                    $depTime = '15:00:00';
+                } elseif ($isLast) {
+                    $arrTime = '06:00:00';
+                } else {
+                    $arrTime = '22:00:00';
+                    $depTime = '22:10:00';
+                }
+
+                Route::create([
+                    'train_id' => $reverseTrain->id,
+                    'station_id' => $stations[$stop['code']]->id,
+                    'stop_number' => $index + 1,
+                    'arrival_time' => $arrTime,
+                    'departure_time' => $depTime,
+                    'distance_from_source' => $dist,
+                    'fare_factor' => $fare,
+                ]);
+            }
+            $trains[$reverseTrain->train_number] = $reverseTrain;
         }
-
-        // 4. Create Routes
-        // Route for 12301: NDLS -> PNBE -> HWH
-        Route::create([
-            'train_id' => $trains['12301']->id,
-            'station_id' => $stations['NDLS']->id,
-            'stop_number' => 1,
-            'arrival_time' => null,
-            'departure_time' => '16:55:00',
-            'distance_from_source' => 0,
-            'fare_factor' => 1.00,
-        ]);
-        Route::create([
-            'train_id' => $trains['12301']->id,
-            'station_id' => $stations['PNBE']->id,
-            'stop_number' => 2,
-            'arrival_time' => '05:45:00',
-            'departure_time' => '05:55:00',
-            'distance_from_source' => 998,
-            'fare_factor' => 1.20,
-        ]);
-        Route::create([
-            'train_id' => $trains['12301']->id,
-            'station_id' => $stations['HWH']->id,
-            'stop_number' => 3,
-            'arrival_time' => '12:15:00',
-            'departure_time' => null,
-            'distance_from_source' => 1450,
-            'fare_factor' => 1.40,
-        ]);
-
-        // Route for 12002: NDLS -> GKP -> LKO
-        Route::create([
-            'train_id' => $trains['12002']->id,
-            'station_id' => $stations['NDLS']->id,
-            'stop_number' => 1,
-            'arrival_time' => null,
-            'departure_time' => '06:10:00',
-            'distance_from_source' => 0,
-            'fare_factor' => 1.00,
-        ]);
-        Route::create([
-            'train_id' => $trains['12002']->id,
-            'station_id' => $stations['GKP']->id,
-            'stop_number' => 2,
-            'arrival_time' => '10:20:00',
-            'departure_time' => '10:30:00',
-            'distance_from_source' => 410,
-            'fare_factor' => 1.10,
-        ]);
-        Route::create([
-            'train_id' => $trains['12002']->id,
-            'station_id' => $stations['LKO']->id,
-            'stop_number' => 3,
-            'arrival_time' => '12:40:00',
-            'departure_time' => null,
-            'distance_from_source' => 512,
-            'fare_factor' => 1.25,
-        ]);
-
-        // Route for 22692: NDLS -> SBC
-        Route::create([
-            'train_id' => $trains['22692']->id,
-            'station_id' => $stations['NDLS']->id,
-            'stop_number' => 1,
-            'arrival_time' => null,
-            'departure_time' => '19:50:00',
-            'distance_from_source' => 0,
-            'fare_factor' => 1.00,
-        ]);
-        Route::create([
-            'train_id' => $trains['22692']->id,
-            'station_id' => $stations['SBC']->id,
-            'stop_number' => 2,
-            'arrival_time' => '05:20:00',
-            'departure_time' => null,
-            'distance_from_source' => 2365,
-            'fare_factor' => 1.50,
-        ]);
-
-        // Route for 12626: NDLS -> LKO -> MAS
-        Route::create([
-            'train_id' => $trains['12626']->id,
-            'station_id' => $stations['NDLS']->id,
-            'stop_number' => 1,
-            'arrival_time' => null,
-            'departure_time' => '20:10:00',
-            'distance_from_source' => 0,
-            'fare_factor' => 1.00,
-        ]);
-        Route::create([
-            'train_id' => $trains['12626']->id,
-            'station_id' => $stations['LKO']->id,
-            'stop_number' => 2,
-            'arrival_time' => '04:30:00',
-            'departure_time' => '04:45:00',
-            'distance_from_source' => 512,
-            'fare_factor' => 1.20,
-        ]);
-        Route::create([
-            'train_id' => $trains['12626']->id,
-            'station_id' => $stations['MAS']->id,
-            'stop_number' => 3,
-            'arrival_time' => '22:50:00',
-            'departure_time' => null,
-            'distance_from_source' => 2182,
-            'fare_factor' => 1.45,
-        ]);
-
-        // Route for 12138: CSTM -> NDLS
-        Route::create([
-            'train_id' => $trains['12138']->id,
-            'station_id' => $stations['CSTM']->id,
-            'stop_number' => 1,
-            'arrival_time' => null,
-            'departure_time' => '07:30:00',
-            'distance_from_source' => 0,
-            'fare_factor' => 1.00,
-        ]);
-        Route::create([
-            'train_id' => $trains['12138']->id,
-            'station_id' => $stations['NDLS']->id,
-            'stop_number' => 2,
-            'arrival_time' => '05:15:00',
-            'departure_time' => null,
-            'distance_from_source' => 1540,
-            'fare_factor' => 1.30,
-        ]);
 
         // 5. Create Coaches
         $coachClasses = [

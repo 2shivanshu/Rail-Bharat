@@ -55,10 +55,11 @@ class TrainController extends Controller
             $sourceRoute = Route::where('train_id', $train->id)->where('station_id', $sourceStation->id)->first();
             $destRoute = Route::where('train_id', $train->id)->where('station_id', $destStation->id)->first();
 
-            // Check if direction is correct (source stop is before destination stop)
-            if ($sourceRoute->stop_number >= $destRoute->stop_number) {
+            if (!$sourceRoute || !$destRoute) {
                 continue;
             }
+
+            $isReverse = $sourceRoute->stop_number >= $destRoute->stop_number;
 
             // Get or create Schedule for this train on this date
             $schedule = Schedule::firstOrCreate(
@@ -67,8 +68,17 @@ class TrainController extends Controller
             );
 
             // Compute distance and base fare factor
-            $distance = $destRoute->distance_from_source - $sourceRoute->distance_from_source;
-            $fareFactor = $destRoute->fare_factor - $sourceRoute->fare_factor;
+            if ($isReverse) {
+                $distance = $sourceRoute->distance_from_source - $destRoute->distance_from_source;
+                $fareFactor = $sourceRoute->fare_factor - $destRoute->fare_factor;
+                $depTime = $destRoute->departure_time;
+                $arrTime = $sourceRoute->arrival_time;
+            } else {
+                $distance = $destRoute->distance_from_source - $sourceRoute->distance_from_source;
+                $fareFactor = $destRoute->fare_factor - $sourceRoute->fare_factor;
+                $depTime = $sourceRoute->departure_time;
+                $arrTime = $destRoute->arrival_time;
+            }
             if ($fareFactor <= 0) $fareFactor = 1.00;
 
             // Fetch classes and initial availability
@@ -102,14 +112,15 @@ class TrainController extends Controller
                 'train_number' => $train->train_number,
                 'name' => $train->name,
                 'type' => $train->type,
-                'source_departure' => $sourceRoute->departure_time,
-                'dest_arrival' => $destRoute->arrival_time,
-                'duration' => $this->calculateDuration($sourceRoute->departure_time, $destRoute->arrival_time),
+                'source_departure' => $depTime,
+                'dest_arrival' => $arrTime,
+                'duration' => $this->calculateDuration($depTime, $arrTime),
                 'distance' => $distance,
                 'schedule_id' => $schedule->id,
                 'schedule_status' => $schedule->status,
                 'delay_minutes' => $schedule->delay_minutes,
                 'classes' => $classesWithAvailability,
+                'is_reverse' => $isReverse,
             ];
         }
 
@@ -136,14 +147,19 @@ class TrainController extends Controller
                 $sourceRoute = Route::where('train_id', $train->id)->where('station_id', $sourceStation->id)->first();
                 $destRoute = Route::where('train_id', $train->id)->where('station_id', $destStation->id)->first();
                 
-                if ($sourceRoute && $destRoute && $sourceRoute->stop_number < $destRoute->stop_number) {
+                if ($sourceRoute && $destRoute) {
+                    $isAltReverse = $sourceRoute->stop_number >= $destRoute->stop_number;
+                    $altDepTime = $isAltReverse ? $destRoute->departure_time : $sourceRoute->departure_time;
+                    $altArrTime = $isAltReverse ? $sourceRoute->arrival_time : $destRoute->arrival_time;
+
                     $alternatives[] = [
                         'train_id' => $train->id,
                         'train_number' => $train->train_number,
                         'name' => $train->name,
                         'date' => $altDateStr,
-                        'departure_time' => $sourceRoute->departure_time,
-                        'arrival_time' => $destRoute->arrival_time,
+                        'departure_time' => $altDepTime,
+                        'arrival_time' => $altArrTime,
+                        'is_reverse' => $isAltReverse,
                     ];
                 }
             }

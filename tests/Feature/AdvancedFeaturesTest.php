@@ -340,4 +340,73 @@ class AdvancedFeaturesTest extends TestCase
             'description' => 'E-Catering Meal Order for PNR: AGENTPNR55'
         ]);
     }
+
+    /**
+     * Test Bidirectional Train Search (Forward & Reverse)
+     */
+    public function test_bidirectional_train_search(): void
+    {
+        // Create reverse train (HWH to NDLS)
+        $reverseTrain = Train::create([
+            'train_number' => '12302',
+            'name' => 'Kolkata New Delhi Rajdhani Express',
+            'type' => 'Rajdhani',
+            'source_station_id' => $this->hwh->id,
+            'destination_station_id' => $this->ndls->id,
+            'runs_on' => '1,2,3,4,5,6,7',
+        ]);
+
+        // Route for reverse train (stop 1 is HWH, stop 2 is NDLS)
+        Route::create([
+            'train_id' => $reverseTrain->id,
+            'station_id' => $this->hwh->id,
+            'stop_number' => 1,
+            'arrival_time' => null,
+            'departure_time' => '15:00:00',
+            'distance_from_source' => 0,
+            'fare_factor' => 1.00,
+        ]);
+        Route::create([
+            'train_id' => $reverseTrain->id,
+            'station_id' => $this->ndls->id,
+            'stop_number' => 2,
+            'arrival_time' => '06:00:00',
+            'departure_time' => null,
+            'distance_from_source' => 1450,
+            'fare_factor' => 1.50,
+        ]);
+
+        // Create coach for reverse train
+        Coach::create([
+            'train_id' => $reverseTrain->id,
+            'coach_number' => 'S1',
+            'class_type' => 'SL',
+            'total_seats' => 8,
+        ]);
+
+        // Search from NDLS to HWH
+        $response = $this->actingAs($this->passenger)->get(route('trains.search', [
+            'source' => 'NDLS',
+            'destination' => 'HWH',
+            'date' => Carbon::today()->addDay()->format('Y-m-d'),
+        ]));
+
+        $response->assertStatus(200);
+        $props = $response->original->getData()['page']['props'];
+
+        // Assert we got both forward (12301) and reverse (12302) trains in the results
+        $trainNumbers = collect($props['trains'])->pluck('train_number')->toArray();
+        $this->assertContains('12301', $trainNumbers);
+        $this->assertContains('12302', $trainNumbers);
+
+        // Find the reverse train in results and check attributes
+        $resultReverseTrain = collect($props['trains'])->firstWhere('train_number', '12302');
+        $this->assertTrue($resultReverseTrain['is_reverse']);
+        // Verify source departure and dest arrival time for reverse train in NDLS->HWH search
+        // Since we are searching NDLS to HWH, NDLS is source (stop 2, arrival 06:00:00)
+        // and HWH is destination (stop 1, departure 15:00:00)
+        $this->assertEquals('15:00:00', $resultReverseTrain['source_departure']);
+        $this->assertEquals('06:00:00', $resultReverseTrain['dest_arrival']);
+    }
 }
+
