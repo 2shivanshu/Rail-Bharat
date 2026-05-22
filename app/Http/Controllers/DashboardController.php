@@ -88,12 +88,21 @@ class DashboardController extends Controller
         $activeComplaintsCount = Complaint::whereIn('status', ['Open', 'In Progress'])->count();
 
         // 2. Revenue breakdown by month
+        $driver = DB::connection()->getDriverName();
+        if ($driver === 'pgsql') {
+            $monthExpr = "TO_CHAR(created_at, 'Mon YYYY')";
+        } elseif ($driver === 'sqlite') {
+            $monthExpr = "strftime('%m-%Y', created_at)";
+        } else {
+            $monthExpr = "DATE_FORMAT(created_at, '%b %Y')";
+        }
+
         $revenueData = Payment::select(
-                DB::raw("DATE_FORMAT(created_at, '%b %Y') as month"),
+                DB::raw("$monthExpr as month"),
                 DB::raw("SUM(CASE WHEN payment_status = 'Success' THEN amount ELSE 0 END) - SUM(CASE WHEN payment_status = 'Refunded' THEN amount ELSE 0 END) as net_revenue")
             )
-            ->groupBy('month')
-            ->orderBy('created_at', 'asc')
+            ->groupBy(DB::raw($monthExpr))
+            ->orderBy(DB::raw("MIN(created_at)"), 'asc')
             ->take(6)
             ->get();
 

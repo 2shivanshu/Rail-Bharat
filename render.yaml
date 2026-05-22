@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: rail-bharat
+    env: php
+    plan: free
+    buildCommand: composer install --no-dev --optimize-autoloader && npm install && npm run build
+    # Document Root is public/ for Laravel
+    releaseCommand: php artisan migrate --force && php artisan tinker --execute="if (\App\Models\Station::count() === 0) { Artisan::call('db:seed', ['--force' => true]); }"
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        generateValue: true
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: rail-bharat-db
+          property: host
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_DATABASE
+        fromDatabase:
+          name: rail-bharat-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: rail-bharat-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: rail-bharat-db
+          property: password
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DOCUMENT_ROOT
+        value: public
+
+databases:
+  - name: rail-bharat-db
+    plan: free

@@ -25,6 +25,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Vite::prefetch(concurrency: 3);
 
+        if (env('APP_ENV') === 'production') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         Gate::define('admin-only', function (User $user) {
             return $user->role === 'admin';
         });
