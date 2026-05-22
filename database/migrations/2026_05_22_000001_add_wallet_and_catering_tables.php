@@ -10,7 +10,7 @@ return new class extends Migration
     public function up(): void
     {
         // Alter role enum to include agent
-        if (\DB::connection()->getDriverName() !== 'sqlite') {
+        if (\DB::connection()->getDriverName() === 'mysql') {
             DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('passenger', 'admin', 'agent') DEFAULT 'passenger'");
         }
 
@@ -65,7 +65,7 @@ return new class extends Migration
                 $table->dropColumn('wallet_balance');
             }
         });
-        if (\DB::connection()->getDriverName() !== 'sqlite') {
+        if (\DB::connection()->getDriverName() === 'mysql') {
             DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('passenger', 'admin') DEFAULT 'passenger'");
         }
     }
